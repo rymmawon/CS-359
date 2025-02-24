@@ -1,7 +1,7 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE Member (
-memberId INTEGER PRIMARY KEY,
+memberId INTEGER PRIMARY KEY AUTOINCREMENT,
 name VARCHAR(50),
 email VARCHAR(50) NOT NULL,
 phone VARCHAR(15),
@@ -11,20 +11,20 @@ membershipStartDate DATE NOT NULL,
 membershipEndDate DATE NOT NULL CHECK (membershipEndDate >= membershipStartDate)
 );
 CREATE TABLE Instructor (
-instructorId INTEGER PRIMARY KEY,
+instructorId INTEGER PRIMARY KEY AUTOINCREMENT,
 name VARCHAR(50),
 specialty VARCHAR(50),
 phone VARCHAR(15),
 email VARCHAR(100) NOT NULL
 );
 CREATE TABLE GymFacility (
-gymId INTEGER PRIMARY KEY,
+gymId INTEGER PRIMARY KEY AUTOINCREMENT,
 location VARCHAR(100),
 phone VARCHAR(50),
 manager VARCHAR(50)
 );
 CREATE TABLE Class (
-classId INTEGER PRIMARY KEY,
+classId INTEGER PRIMARY KEY AUTOINCREMENT,
 className VARCHAR(50),
 classType VARCHAR(20) NOT NULL CHECK (classType IN ('Yoga', 'Zumba', 'HIIT', 'Weights')),
 duration INTEGER NOT NULL,
@@ -35,7 +35,7 @@ FOREIGN KEY (instructorId) REFERENCES Instructor(instructorId),
 FOREIGN KEY (gymId) REFERENCES GymFacility(gymId)
 );
 CREATE TABLE Equipment (
-equipmentId INTEGER PRIMARY KEY,
+equipmentId INTEGER PRIMARY KEY AUTOINCREMENT,
 name VARCHAR(50) NOT NULL,
 type VARCHAR(30) NOT NULL CHECK (type IN ('Cardio', 'Strength', 'Flexibility', 'Recovery')),
 quantity INTEGER,
@@ -43,12 +43,12 @@ gymId INTEGER,
 FOREIGN KEY (gymId) REFERENCES GymFacility(gymId)
 );
 CREATE TABLE MembershipPlan (
-planId INTEGER PRIMARY KEY,
+planId INTEGER PRIMARY KEY AUTOINCREMENT,
 planType VARCHAR(20) NOT NULL CHECK (planType IN ('Monthly', 'Annual')),
 cost NUMERIC NOT NULL
 );
 CREATE TABLE Payment (
-paymentId INTEGER PRIMARY KEY,
+paymentId INTEGER PRIMARY KEY AUTOINCREMENT,
 memberId INTEGER,
 planId INTEGER,
 amountPaid REAL NOT NULL,
