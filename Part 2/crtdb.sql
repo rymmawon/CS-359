@@ -26,7 +26,7 @@ manager VARCHAR(50)
 CREATE TABLE Class (
 classId INTEGER PRIMARY KEY AUTOINCREMENT,
 className VARCHAR(50),
-classType VARCHAR(20) NOT NULL CHECK (classType IN ('Yoga', 'Zumba', 'HIIT', 'Weights')),
+classType VARCHAR(20) NOT NULL CHECK (classType IN ('Yoga', 'Zumba', 'HIIT', 'Weights', 'Swim')),
 duration INTEGER NOT NULL,
 classCapacity INTEGER NOT NULL,
 instructorId INTEGER,
@@ -37,14 +37,14 @@ FOREIGN KEY (gymId) REFERENCES GymFacility(gymId)
 CREATE TABLE Equipment (
 equipmentId INTEGER PRIMARY KEY AUTOINCREMENT,
 name VARCHAR(50) NOT NULL,
-type VARCHAR(30) NOT NULL CHECK (type IN ('Cardio', 'Strength', 'Flexibility', 'Recovery')),
+type VARCHAR(30) NOT NULL CHECK (type IN ('Cardio', 'Strength', 'Flexibility', 'Recovery', 'Safety')),
 quantity INTEGER,
 gymId INTEGER,
 FOREIGN KEY (gymId) REFERENCES GymFacility(gymId)
 );
 CREATE TABLE MembershipPlan (
 planId INTEGER PRIMARY KEY AUTOINCREMENT,
-planType VARCHAR(20) NOT NULL CHECK (planType IN ('Monthly', 'Annual')),
+planType VARCHAR(20) NOT NULL CHECK (planType IN ('Monthly', 'Annual', 'Punch Card', 'Weekly', 'Discount')),
 cost NUMERIC NOT NULL
 );
 CREATE TABLE Payment (
