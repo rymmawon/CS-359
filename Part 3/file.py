@@ -303,6 +303,113 @@ def query7():
     
     conn.close()
 
+def query8():
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    #Query for top 3 instructors
+    topInstructors_query = """
+    SELECT instructorId, name, frequency
+    FROM Instructor NATURAL JOIN (
+        SELECT instructorId, COUNT(*) as frequency
+        FROM Class
+        GROUP BY instructorId
+        ORDER BY frequency DESC
+        LIMIT 3)
+    """
+
+    cursor.execute(topInstructors_query)
+    topIns_result = cursor.fetchall()
+
+    print("Top 3 Instructors:")
+    print("=" * 59)
+
+    # Define column widths
+    widths = [14, 20, 10]
+    headers = ["Instructor ID", "Instructor Name", "# of Classes Taught"]
+    
+    print_table_header(headers, widths)
+    
+    for row in topIns_result:
+        formatted_row = " | ".join([
+            f"{row['instructorId']:{widths[0]}}", 
+            f"{row['name']:{widths[1]}}", 
+            f"{row['frequency']:{widths[2]}}"
+        ])
+        print(formatted_row)
+
+    conn.close()
+
+def query9():
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    #query for members who attend a certain class type
+
+    classInType_query = """
+    SELECT classId
+    FROM Class NATURAL JOIN Attends
+    WHERE classType = ?
+    """
+    cursor.execute(classInType_query)
+    classInType_result = cursor.fetchall()
+
+    all_type_query = """
+    SELECT name
+    FROM Attends NATURAL JOIN Member
+    WHERE classId IN (SELECT classId
+    FROM Class NATURAL JOIN Attends
+    WHERE classType = ?)
+    """ 
+    
+    cursor.execute(all_type_query)
+    all_type_result = cursor.fetchall()
+
+    names = []
+    """
+    for name in all_type_result:
+        for classType in classInType_result:
+            if 
+            """
+
+    print("Members who attend all of class type:")
+    print("=" * 59)
+
+    conn.close()
+
+def query10():
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    #Query for recently active members
+    recent_query = """
+    SELECT *
+    FROM Attends NATURAL JOIN MEMBER NATURAL JOIN Class
+    WHERE attendanceDate >= (SELECT DATE(CURRENT_DATE, '-1 month'))
+    """
+
+    cursor.execute(recent_query)
+    recent_result = cursor.fetchall()     
+    
+    print("Members active in last month")
+    print("=" * 70)
+
+    # Define column widths
+    widths = [14, 20, 10]
+    headers = ["Member Name", "Class Name", "Class Type"]
+    
+    print_table_header(headers, widths)
+    
+    for row in recent_result:
+        formatted_row = " | ".join([
+            f"{row['name']:{widths[0]}}", 
+            f"{row['className']:{widths[1]}}", 
+            f"{row['classType']:{widths[2]}}"
+        ])
+        print(formatted_row)
+
+    conn.close()
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python file.py <query_number> [additional_parameters]")
@@ -314,6 +421,9 @@ def main():
         print("5: Members with expired memberships")
         print("6: List of classes taught by a specific instructor")
         print("7: Average age of active vs. expired members")
+        print("8: Top instructors")
+        print("9: Members who attend all of a certain class type")
+        print("10: Recently active members")
         return
     
     query_num = sys.argv[1]
@@ -336,6 +446,12 @@ def main():
             query6(instructor_id)
         elif query_num == "7":
             query7()
+        elif query_num == "8":
+            query8()
+        elif query_num == "9":
+            query9()
+        elif query_num == "10":
+            query10()
         else:
             print(f"Invalid query number: {query_num}.")
     except Exception as e:
