@@ -340,41 +340,45 @@ def query8():
 
     conn.close()
 
-def query9():
+
+def query9(class_type=None):
     conn = connect_to_db()
     cursor = conn.cursor()
-
-    #query for members who attend a certain class type
-
-    classInType_query = """
-    SELECT classId
-    FROM Class NATURAL JOIN Attends
-    WHERE classType = ?
-    """
-    cursor.execute(classInType_query)
-    classInType_result = cursor.fetchall()
-
-    all_type_query = """
-    SELECT name
-    FROM Attends NATURAL JOIN Member
-    WHERE classId IN (SELECT classId
-    FROM Class NATURAL JOIN Attends
-    WHERE classType = ?)
-    """ 
     
-    cursor.execute(all_type_query)
-    all_type_result = cursor.fetchall()
-
-    names = []
+    if class_type is None or class_type.strip() == "":
+        types_query = "SELECT DISTINCT classType FROM Class"
+        cursor.execute(types_query)
+        types = cursor.fetchall()
+        print("Available Class Types:")
+        print("=" * 50)
+        for t in types:
+            print(f"- {t['classType']}")
+        print("\nUsage: python file.py 9 <classType>")
+        conn.close()
+        return
+    
+    members_query = """
+    SELECT DISTINCT m.memberId, m.name
+    FROM Member m
+    JOIN Attends a ON m.memberId = a.memberId
+    JOIN Class c ON a.classId = c.classId
+    WHERE c.classType = ?
     """
-    for name in all_type_result:
-        for classType in classInType_result:
-            if 
-            """
-
-    print("Members who attend all of class type:")
-    print("=" * 59)
-
+    
+    cursor.execute(members_query, (class_type,))
+    results = cursor.fetchall()
+    
+    if not results:
+        print(f"No members have attended classes of type '{class_type}'")
+        conn.close()
+        return
+    
+    print(f"Members who have attended classes of type '{class_type}':")
+    print("=" * 50)
+    
+    for row in results:
+        print(f"- {row['name']}")
+    
     conn.close()
 
 def query10():
@@ -449,7 +453,8 @@ def main():
         elif query_num == "8":
             query8()
         elif query_num == "9":
-            query9()
+            class_type = sys.argv[2] if len(sys.argv) > 2 else None
+            query9(class_type)
         elif query_num == "10":
             query10()
         else:
