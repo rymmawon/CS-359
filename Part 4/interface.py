@@ -18,14 +18,14 @@ def print_table_header(headers, widths):
     separator = "=" * len(header_row)
     print(separator)
 
-def main_menu():
+def main_menu(connection):
     print("\nMain Menu")
     print("\n1. Members Menu")
     print("\n2. Classes Menu")
     print("\n3. Equipment Menu")
     print("\n4. Logout and exit")
     
-def members_menu():
+def members_menu(connection):
     print("\nMembers Menu")
     print("\n1. Display all members")
     print("\n2. Add new member")
@@ -33,24 +33,8 @@ def members_menu():
     print("\n4. Delete member")
     print("\n5. Back to main menu")
     choice = input("Enter your choice: ")
-
-def display_all_members():
-    print("Member List")
-
-def add_member():
-    print("Input member Info")
-    name = input("Member's Full name: ")
-    age = input("Member's Age: ")
-    gender = input("Members gender: ")
-
-def update_member():
-    print("Search for desired member")
     
-def delete_member():
-    print("Deleting desired member")
-    #have to delete them from all tables
-    
-def classes_menu():
+def classes_menu(connection):
     print("\nClasses Menu")
     print("\n1. Display all classes")
     print("\n2. Add new class")
@@ -59,25 +43,8 @@ def classes_menu():
     print("\n5. Find members by class")
     print("\n6. Back to main menu")
     choice = input("Enter your choice: ")
-
-def display_all_classes():
-    print("Class List")
-
-def add_class():
-    print("Input class Info")
-    name = input("Class name: ")
-    c_type = input("Class type: ")
-    duration = input("Class duration: ")
-    limit = input("Class enrollment limit: ")
-
-def update_class():
-    print("Search for desired class")
     
-def delete_class():
-    print("Deleting desired class")
-    #have to delete them from all tables
-    
-def equipment_menu():
+def equipment_menu(connection):
     print("\nEquipment Menu")
     print("\n1. Display all equipment")
     print("\n2. Insert new equipment")
@@ -85,42 +52,50 @@ def equipment_menu():
     print("\n4. Delete equipment")
     print("\n5. Back to main menu")
     choice = input("Enter your choice: ")
-
-def display_all_equipment():
-    print("Equipment Inventory")
-
-def insert_equipment():
-    print("Input equipment Info")
-    name = input("Equipment name: ")
-    e_type = input("Equipment Type: ")
-    quantity = input("Equipment quantity: ")
-
-def update_equipment():
-    print("Search for desired member")
     
-def delete_equipment():
-    print("Deleting desired member")
+def display(table):
+    print(table + " List")
+
+def add(table):
+    print("Input " + table + " Info")
+    
+    name = input("name: ")
+    c_type = input("type: ")
+    duration = input("Class duration: ")
+    limit = input("Class enrollment limit: ")
+
+def update(table):
+    print("Search for desired " + table)
+    
+def delete(table):
+    print("Deleting desired " + table)
     #have to delete them from all tables
     
 def logout():
     print("Logging off, Thank you!")
     exit()
     
-def menu():
+def menu(connection):
     
     main_menu()
     choice = input("Enter your choice: ")
     
     if choice == '1':
-        members_menu()
+        members_menu(connection)
     elif choice == '2':
-        classes_menu()
+        classes_menu(connection)
     elif choice == '3':
-        equipment_menu()
+        equipment_menu(connection)
     elif choice == '4':
         logout()
     else:
         print("\nInvalid choice. Please try again.")
+
+def main():
+    database = input("Enter name of database:")
+    
+    if database == "XYZGym":
+        menu(connect_to_db())
             
 if __name__ == "__main__":
-    menu()
+    main()
