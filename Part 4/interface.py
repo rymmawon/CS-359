@@ -32,7 +32,8 @@ def members_menu(connection):
     print("\n3. Update member information")
     print("\n4. Delete member")
     print("\n5. Back to main menu")
-    choice = input("Enter your choice: ")
+    crud_select(connection, "Member")
+    
     
 def classes_menu(connection):
     print("\nClasses Menu")
@@ -40,9 +41,9 @@ def classes_menu(connection):
     print("\n2. Add new class")
     print("\n3. Update class information")
     print("\n4. Delete class")
-    print("\n5. Find members by class")
-    print("\n6. Back to main menu")
-    choice = input("Enter your choice: ")
+    print("\n5. Back to main menu")
+    print("\n6. Find members by class")
+    crud_select(connection, "Class")
     
 def equipment_menu(connection):
     print("\nEquipment Menu")
@@ -51,7 +52,7 @@ def equipment_menu(connection):
     print("\n3. Update equipment details")
     print("\n4. Delete equipment")
     print("\n5. Back to main menu")
-    choice = input("Enter your choice: ")
+    crud_select(connection, "Equipment")
     
 def display(table):
     print(table + " List")
@@ -70,6 +71,34 @@ def update(table):
 def delete(table):
     print("Deleting desired " + table)
     #have to delete them from all tables
+    
+def find_class():
+    classID = input("Input class ID to find members who attended: ")
+
+def crud_select(connection, table):
+    
+    choice = input("Enter your choice: ")
+    
+    try:
+        if choice == "1":
+            display(table)
+        elif choice == "2":
+            add(table)
+        elif choice == "3":
+            update(table)
+        elif choice == "4":
+            delete(table)
+        elif choice == "5":
+            main_menu(connection)
+        elif choice == "6":
+            find_class()
+        else:
+            print(f"Invalid choice number: {choice}.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print(f"Type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
     
 def logout():
     print("Logging off, Thank you!")
