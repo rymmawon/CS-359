@@ -415,9 +415,21 @@ def menu(connection):
             print("Invalid choice. Please try again.")
 
 def main():
-    db_name = input("Enter name of database:: ")
+
+    correctDB = False
+
+    while(correctDB != True): 
+        db_name = input("Enter name of database:: ")
+
+        if(db_name == "XYZGym.sqlite"):
+            correctDB = True
+            print("Successful Connection!")
+        else:
+            print("Database not found")
+    
     connection = connect_to_db(db_name)
     menu(connection)
+    
 
 if __name__ == "__main__":
     main()
